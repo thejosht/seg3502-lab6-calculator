@@ -1,0 +1,53 @@
+package seg3x02.calculatorapi.controller
+
+import io.swagger.v3.oas.annotations.Operation
+import io.swagger.v3.oas.annotations.media.Content
+import io.swagger.v3.oas.annotations.media.Schema
+import io.swagger.v3.oas.annotations.responses.ApiResponse
+import io.swagger.v3.oas.annotations.responses.ApiResponses
+import io.swagger.v3.oas.annotations.tags.Tag
+import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PathVariable
+import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RestController
+
+@RestController
+@RequestMapping("/calculator")
+@Tag(name = "Calculator", description = "Arithmetic operations on two numbers.")
+@ApiResponses(
+    ApiResponse(responseCode = "200", description = "Calculation result",
+        content = [Content(mediaType = "application/json", schema = Schema(type = "number", format = "double"))]),
+    ApiResponse(responseCode = "400", description = "Invalid numbers, division by zero or result outside the supported range",
+        content = [Content(mediaType = "text/plain", schema = Schema(type = "string"))])
+)
+class CalculatorController {
+    @GetMapping("/add/{nombre1}/{nombre2}")
+    @Operation(summary = "Add two numbers")
+    fun add(@PathVariable nombre1: Double, @PathVariable nombre2: Double): Double =
+        calculate(nombre1, nombre2) { a, b -> a + b }
+
+    @GetMapping("/subtract/{nombre1}/{nombre2}")
+    @Operation(summary = "Subtract the second number from the first")
+    fun subtract(@PathVariable nombre1: Double, @PathVariable nombre2: Double): Double =
+        calculate(nombre1, nombre2) { a, b -> a - b }
+
+    @GetMapping("/multiply/{nombre1}/{nombre2}")
+    @Operation(summary = "Multiply two numbers")
+    fun multiply(@PathVariable nombre1: Double, @PathVariable nombre2: Double): Double =
+        calculate(nombre1, nombre2) { a, b -> a * b }
+
+    @GetMapping("/divide/{nombre1}/{nombre2}")
+    @Operation(summary = "Divide the first number by the second")
+    fun divide(@PathVariable nombre1: Double, @PathVariable nombre2: Double): Double =
+        calculate(nombre1, nombre2) { a, b ->
+            require(b != 0.0) { "Cannot divide by zero." }
+            a / b
+        }
+
+    private fun calculate(a: Double, b: Double, operation: (Double, Double) -> Double): Double {
+        require(a.isFinite() && b.isFinite()) { "Both operands must be finite numbers." }
+        val result = operation(a, b)
+        require(result.isFinite()) { "The result is outside the supported range." }
+        return result
+    }
+}
