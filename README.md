@@ -14,7 +14,7 @@ cd seg3502-lab6-calculator
 
 Sur Windows, utiliser `.\gradlew.bat bootRun`. Ouvrir [Swagger UI](http://localhost:8080/swagger-ui.html). L'adresse racine redirige aussi vers cette page. Le serveur n'écoute que sur cet ordinateur.
 
-Si le port 8080 est déjà utilisé :
+Si le port 8080 est déjà utilisé:
 
 ```sh
 ./gradlew bootRun --args='--server.port=8081'
