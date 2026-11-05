@@ -7,9 +7,9 @@ import org.springframework.boot.runApplication
 
 @SpringBootApplication
 @OpenAPIDefinition(info = Info(
-    title = "Calculator API",
+    title = "API de calcul",
     version = "1.0",
-    description = "Addition, subtraction, multiplication and division of two numbers."
+    description = "Addition, soustraction, multiplication et division de deux nombres."
 ))
 class CalculatorApiApplication
 

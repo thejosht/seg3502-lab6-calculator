@@ -1,10 +1,10 @@
-# Calculator API
+# API de calcul
 
-A small Kotlin and Spring Boot API for arithmetic on two numbers. Results are returned as JSON numbers. Swagger UI lets you try each operation in the browser.
+Cette API en Kotlin et Spring Boot effectue des calculs sur deux nombres. Le résultat est un nombre JSON. Swagger UI permet d'essayer chaque opération dans le navigateur.
 
-## Run
+## Exécution
 
-Install JDK 17 or newer and Git. The Gradle wrapper downloads Gradle and the project dependencies on the first run, so an Internet connection is needed.
+Installer JDK 17 ou une version plus récente et Git. Au premier lancement, le script Gradle télécharge Gradle et les dépendances du projet. Une connexion Internet est donc nécessaire.
 
 ```sh
 git clone https://github.com/thejosht/seg3502-lab6-calculator.git
@@ -12,28 +12,28 @@ cd seg3502-lab6-calculator
 ./gradlew bootRun
 ```
 
-On Windows, use `.\gradlew.bat bootRun` instead. Open [Swagger UI](http://localhost:8080/swagger-ui.html). The root address also redirects there. The server listens only on this computer.
+Sur Windows, utiliser `.\gradlew.bat bootRun`. Ouvrir [Swagger UI](http://localhost:8080/swagger-ui.html). L'adresse racine redirige aussi vers cette page. Le serveur n'écoute que sur cet ordinateur.
 
-If port 8080 is already in use:
+Si le port 8080 est déjà utilisé :
 
 ```sh
 ./gradlew bootRun --args='--server.port=8081'
 ```
 
-Use the chosen port in the URLs below.
+Remplacer le port dans les adresses ci-dessous par celui choisi.
 
-## Operations
+## Opérations
 
-Both path parameters are numbers and may be negative or decimal.
+Les deux paramètres dans l'URL sont des nombres qui peuvent être négatifs ou décimaux. Utiliser un point comme séparateur décimal, par exemple `2.5`.
 
-| Method | Route | Example result |
+| Méthode | Route | Exemple de résultat |
 | --- | --- | --- |
 | GET | `/calculator/add/10/2` | `12.0` |
 | GET | `/calculator/subtract/10/2` | `8.0` |
 | GET | `/calculator/multiply/10/2` | `20.0` |
 | GET | `/calculator/divide/7/2` | `3.5` |
 
-Each route follows `/calculator/{operation}/{nombre1}/{nombre2}`. Subtraction and division use the first number followed by the second.
+Chaque route suit le format `/calculator/{operation}/{nombre1}/{nombre2}`. La soustraction calcule `nombre1 - nombre2` et la division calcule `nombre1 / nombre2`.
 
 ```sh
 curl http://localhost:8080/calculator/add/10/2
@@ -42,26 +42,26 @@ curl http://localhost:8080/calculator/multiply/10/2
 curl http://localhost:8080/calculator/divide/7/2
 ```
 
-Invalid numbers, non-finite values, division by zero and numeric overflow return HTTP 400 with a short message. Calculations use `Double`, so ordinary floating-point rounding applies. There is no database or API key to configure.
+Les nombres invalides, les valeurs non finies, la division par zéro et les dépassements numériques renvoient HTTP 400 avec un court message. Les calculs utilisent le type `Double` et peuvent donc présenter des erreurs d'arrondi liées à la virgule flottante. Aucune base de données ni clé d'API n'est nécessaire.
 
 ## OpenAPI
 
 - [Swagger UI](http://localhost:8080/swagger-ui.html)
-- [JSON specification](http://localhost:8080/v3/api-docs)
-- [YAML specification](http://localhost:8080/v3/api-docs.yaml)
+- [Spécification JSON](http://localhost:8080/v3/api-docs)
+- [Spécification YAML](http://localhost:8080/v3/api-docs.yaml)
 
-The specification is generated from the controller and documents all four routes, path parameters, numeric results and HTTP 400 errors.
+La spécification est générée à partir du contrôleur. Elle décrit les quatre routes, leurs paramètres, les résultats numériques et les erreurs HTTP 400.
 
-## Test and build
+## Tests et compilation
 
 ```sh
 ./gradlew clean test bootJar
 java -jar build/libs/calculator-api-0.0.1-SNAPSHOT.jar
 ```
 
-The tests call a real server on a random local port. They cover all operations, negative and decimal inputs, invalid values, zero division, overflow, documentation and routing. Open `build/reports/tests/test/index.html` for the results. Stop a running server with Ctrl+C.
+Les tests appellent un serveur réel sur un port local attribué automatiquement. Ils couvrent les quatre opérations, les valeurs négatives et décimales, les entrées invalides, la division par zéro, les dépassements numériques, la documentation et le routage. Ouvrir `build/reports/tests/test/index.html` pour voir les résultats. Arrêter le serveur avec Ctrl+C.
 
-## References
+## Références
 
-- [Spring Boot documentation](https://docs.spring.io/spring-boot/reference/)
-- [springdoc OpenAPI documentation](https://springdoc.org/)
+- [Documentation Spring Boot](https://docs.spring.io/spring-boot/reference/)
+- [Documentation springdoc OpenAPI](https://springdoc.org/)

@@ -13,31 +13,31 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping("/calculator")
-@Tag(name = "Calculator", description = "Arithmetic operations on two numbers.")
+@Tag(name = "Calculatrice", description = "Opérations arithmétiques sur deux nombres.")
 @ApiResponses(
-    ApiResponse(responseCode = "200", description = "Calculation result",
+    ApiResponse(responseCode = "200", description = "Résultat du calcul",
         content = [Content(mediaType = "application/json", schema = Schema(type = "number", format = "double"))]),
-    ApiResponse(responseCode = "400", description = "Invalid numbers, division by zero or result outside the supported range",
+    ApiResponse(responseCode = "400", description = "Nombres invalides, division par zéro ou dépassement numérique",
         content = [Content(mediaType = "text/plain", schema = Schema(type = "string"))])
 )
 class CalculatorController {
     @GetMapping("/add/{nombre1}/{nombre2}")
-    @Operation(summary = "Add two numbers")
+    @Operation(summary = "Additionner deux nombres")
     fun add(@PathVariable nombre1: Double, @PathVariable nombre2: Double): Double =
         calculate(nombre1, nombre2) { a, b -> a + b }
 
     @GetMapping("/subtract/{nombre1}/{nombre2}")
-    @Operation(summary = "Subtract the second number from the first")
+    @Operation(summary = "Soustraire le deuxième nombre du premier")
     fun subtract(@PathVariable nombre1: Double, @PathVariable nombre2: Double): Double =
         calculate(nombre1, nombre2) { a, b -> a - b }
 
     @GetMapping("/multiply/{nombre1}/{nombre2}")
-    @Operation(summary = "Multiply two numbers")
+    @Operation(summary = "Multiplier deux nombres")
     fun multiply(@PathVariable nombre1: Double, @PathVariable nombre2: Double): Double =
         calculate(nombre1, nombre2) { a, b -> a * b }
 
     @GetMapping("/divide/{nombre1}/{nombre2}")
-    @Operation(summary = "Divide the first number by the second")
+    @Operation(summary = "Diviser le premier nombre par le deuxième")
     fun divide(@PathVariable nombre1: Double, @PathVariable nombre2: Double): Double =
         calculate(nombre1, nombre2) { a, b ->
             require(b != 0.0) { "Cannot divide by zero." }
